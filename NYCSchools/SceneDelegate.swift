@@ -22,7 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let apiService:DataAPIServiceProtocol = DataTaskAPIService()
         let schoolsDataViewModel = SchoolsDataViewModel(apiService: apiService)
 
-      //  window?.rootViewController = SchoolDetailViewController(schoolData: nil)
         window?.rootViewController = UINavigationController(rootViewController:SchoolsListViewController(schoolsDataViewModel: schoolsDataViewModel))
         window?.makeKeyAndVisible()
         
