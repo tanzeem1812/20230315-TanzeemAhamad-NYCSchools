@@ -1,0 +1,13 @@
+//
+//  Config.xcconfig
+//  NYCSchools
+//
+//  Created by Tanzeem Ahamad on 3/15/23.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+//Add Production API URLs 
+SCHOOLS_DATA_API_URL =  https:\/\/data.cityofnewyork.us/resource/s3k6-pzi2.json
+SCHOOL_EXTRA_DATA_API_URL = https:\/\/data.cityofnewyork.us/resource/f9bf-2cp4.json

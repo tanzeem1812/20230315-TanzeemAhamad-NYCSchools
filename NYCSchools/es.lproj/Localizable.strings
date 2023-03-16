@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  NYCSchools
+
+  Created by Tanzeem Ahamad on 3/15/23.
+  
+*/
+SCHOOLS = "Escuelas";
+LOCATION = "Ubicación";
+ERROR = "Error";
+OK = "De acuerdo";
+NAME = "Nombre";
