@@ -6,6 +6,7 @@
 //
 
 // School  Data Model. More fields can be added as per the requirements
+// CodingKeys can be used here to keep fieldname short
 struct SchoolDataModel:Decodable{
     var dbn:String
     var school_name:String
