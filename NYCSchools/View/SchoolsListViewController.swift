@@ -36,7 +36,7 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
     //Set up Table view to listen
     func setUpSchoolsListTableView(){
         schoolListTableView.translatesAutoresizingMaskIntoConstraints = false
-        schoolListTableView.rowHeight = 50;
+        schoolListTableView.rowHeight = 70;
         view.addSubview(schoolListTableView)
         schoolListTableView.register(SchoolTableViewCell.self, forCellReuseIdentifier: cellId)
         

@@ -17,6 +17,7 @@ class SchoolTableViewCell: UITableViewCell {
         
         dbnNameLabel.translatesAutoresizingMaskIntoConstraints = false
         schoolNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        schoolNameLabel.numberOfLines  = 0
         
         contentView.addSubview(dbnNameLabel)
         contentView.addSubview(schoolNameLabel)
@@ -26,6 +27,7 @@ class SchoolTableViewCell: UITableViewCell {
         
         schoolNameLabel.topAnchor.constraint(equalTo: dbnNameLabel.bottomAnchor,constant: 2).isActive = true
         schoolNameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor,constant: 10).isActive = true
+        schoolNameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 2).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
