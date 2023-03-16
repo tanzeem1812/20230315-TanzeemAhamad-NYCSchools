@@ -108,9 +108,8 @@ extension SchoolsListViewController{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! SchoolTableViewCell
         let schoolData = dataForTableView[indexPath.row]
-        cell.dbnNameLabel.text = "DBN:" + schoolData.0 // It will return DBN Value
-        let localizedStr = NSLocalizedString("NAME", comment: "") + ":"
-        cell.schoolNameLabel.text = localizedStr + schoolData.1 // It will return ScboolName Value
+        cell.dbnNameLabel.text =  schoolData.0 // It will return DBN Value
+        cell.schoolNameLabel.text = schoolData.1 // It will return ScboolName Value
         return cell
     }
     

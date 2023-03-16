@@ -6,6 +6,7 @@
   
 */
 SCHOOLS = "Schools";
+SCHOOL = "School";
 LOCATION = "Location";
 ERROR = "Error";
 OK = "Ok";
