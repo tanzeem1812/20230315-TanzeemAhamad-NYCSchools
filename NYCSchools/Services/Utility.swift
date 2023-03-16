@@ -9,6 +9,7 @@
 import Foundation
 
 struct Utility{
+    // This method validates the URL
     static func isValidURLString(urlStr:String)->Bool {
         let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
         if let match = detector.firstMatch(in: urlStr, options: [], range: NSRange(location: 0, length: urlStr.utf16.count)) {
@@ -17,10 +18,14 @@ struct Utility{
             return false
         }
     }
+    
+    // This method return key values mentioned in XCConfig File for Prod and dev environment as selected
     static func infoForKey(_ key: String) -> String? {
             return (Bundle.main.infoDictionary?[key] as? String)?
                 .replacingOccurrences(of: "\\", with: "")
      }
+    
+    // This method return user readable string according to the  the error codes
     static func getErrorMessageForErrorCode(errorCode:ErrorCodes)->String{
         var msg = ""
         
