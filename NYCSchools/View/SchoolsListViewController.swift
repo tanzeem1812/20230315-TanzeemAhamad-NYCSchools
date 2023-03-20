@@ -14,6 +14,7 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
     var dataForTableView = [(String,String)]()
     var schoolsDataViewModel:SchoolsDataViewModel?
     let cellId = "schoolCell"
+    var isWaiting = false
     
     init(schoolsDataViewModel:SchoolsDataViewModel?){
         self.schoolsDataViewModel = schoolsDataViewModel
@@ -30,7 +31,19 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
         setUpNavigation()
         setUpSchoolsListTableView()
         setUpLayOut()
-        fetchSchoolsData()
+        if !isWaiting{
+            isWaiting = true
+            fetchSchoolsData()
+        }
+    }
+    override func viewWillAppear(_ animated:Bool) {
+        super.viewWillAppear( animated)
+        if schoolsDataViewModel?.schoolDataManager.schoolsData.count == 0{
+            if !isWaiting{
+                isWaiting = true
+                fetchSchoolsData()
+            }
+        }
     }
     
     //Set up Table view to listen
@@ -67,14 +80,15 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
     // Retrieve the  data from the viewModel and handle the error properly
     func fetchSchoolsData(){
         schoolsDataViewModel?.fetchSchoolsData(){ result in
-            switch result{
-            case .success(let data): // Data successfully received
-                self.dataForTableView = data
-                DispatchQueue.main.async {
-                    self.schoolListTableView.reloadData()
-                }
-            case .failure(let error): // Show error to the user
-                self.handleError(error: error)
+                switch result{
+                case .success(let data): // Data successfully received
+                    self.dataForTableView = data
+                    DispatchQueue.main.async {
+                        self.schoolListTableView.reloadData()
+                    }
+                case .failure(let error): // Show error to the user
+                    self.handleError(error: error)
+                self.isWaiting = false
             }
         }
     }
@@ -114,7 +128,8 @@ extension SchoolsListViewController{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let schoolDetailViewController = SchoolDetailViewController(selectedIndex:indexPath.row )
+        let dbn = schoolsDataViewModel?.schoolDataManager.schoolsData[indexPath.row].dbn
+        let schoolDetailViewController = SchoolDetailViewController(dbn: dbn)
         schoolDetailViewController.schoolsDataViewModel = self.schoolsDataViewModel
         self.navigationController?.pushViewController(schoolDetailViewController, animated: true)
     }

@@ -11,7 +11,7 @@ import UIKit
 
 class SchoolDetailViewController: UIViewController {
     
-    var selectedIndex : Int = 0
+    var dbn:String?
     var schoolsDataViewModel:SchoolsDataViewModel?
     
     let dbnLabel = UILabel()
@@ -23,9 +23,9 @@ class SchoolDetailViewController: UIViewController {
     let mathAvgScoreLabel =  UILabel()
     let writingAvgScoreLabel = UILabel()
     
-    convenience init(selectedIndex: Int){
+    convenience init( dbn:String?){
         self.init()
-        self.selectedIndex = selectedIndex
+        self.dbn = dbn
     }
     
     override func viewDidLoad() {
@@ -35,16 +35,24 @@ class SchoolDetailViewController: UIViewController {
         //Add Views
         addViews()
         
-        // //Set up the layout of the views
-        setUpDBNView()
-        setUpSchoolNameView()
-        setUpLocationLabelView()
-        setUpTotalStudentsLabelView()
-        
-        //Fetch Extra Data
-        let dbnStr = schoolsDataViewModel?.schoolDataManager.schoolsData[selectedIndex].dbn
-        if dbnStr != nil {
-            schoolsDataViewModel?.fetchSchoolsExtraData(dbnStr:dbnStr!, completion: {[weak self] result in
+         if dbn != nil {
+            // Set up the layout of the views
+            setUpDBNView()
+             
+            let schoolData = schoolsDataViewModel?.schoolDataManager.schoolsData.first{$0.dbn == dbn}
+            
+            if schoolData != nil{
+                setUpSchoolNameView(str:schoolData!.school_name)
+                setUpLocationLabelView(str:schoolData!.location)
+                setUpTotalStudentsLabelView(str:schoolData!.total_students)
+            }
+             else{
+                 setUpSchoolNameView(str:"N/A")
+                 setUpLocationLabelView(str:"N/A")
+                 setUpTotalStudentsLabelView(str:"N/A")
+             }
+            
+            schoolsDataViewModel?.fetchSchoolsExtraData(dbnStr:dbn!, completion: {[weak self] result in
                 switch result{
                 case .success(_):
                     // Show data in main thread as this closure will be called by background thread
@@ -70,65 +78,57 @@ class SchoolDetailViewController: UIViewController {
         view.addSubview(writingAvgScoreLabel)
     }
     
+  
+    func setUpDBNView(){
+        dbnLabel.textColor = .black
+        dbnLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        // Dont use hard coded  string if you are using multiple  languages, apply localization and Use localized string using NSLocalizedString function
+        dbnLabel.text = "DBN : " + "\(dbn!)"
+        dbnLabel.topAnchor.constraint(equalTo: view.topAnchor,constant: 50).isActive = true
+        dbnLabel.leftAnchor.constraint(equalTo: view.leftAnchor,constant: 40).isActive = true
+    }
+    
+    func setUpSchoolNameView(str:String){
+            schoolNameLabel.numberOfLines = 0
+            setColorAndAutosizeMaskConstraint(view: schoolNameLabel)
+            
+            let localizedStr = NSLocalizedString("SCHOOL", comment: "") + " " + NSLocalizedString("NAME", comment: "") + ":"
+        schoolNameLabel.text = localizedStr + "\(str )"
+            setUpAnchorContraints(lastView: dbnLabel, currentView: schoolNameLabel)
+            schoolNameLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    }
+    
+    
+    func setUpLocationLabelView(str:String){
+            locationLabel.numberOfLines = 0
+            setColorAndAutosizeMaskConstraint(view: locationLabel)
+            
+            let localizedStr = NSLocalizedString("LOCATION", comment: "") + ": "
+        locationLabel.text = localizedStr + "\(str )"
+            
+            setUpAnchorContraints(lastView: schoolNameLabel, currentView: locationLabel)
+            locationLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    }
+    
+    func setUpTotalStudentsLabelView(str:String){
+            setColorAndAutosizeMaskConstraint(view: totalStudentsLabel)
+    
+            // Dont use hard coded  string if you are using multiple  languages, apply localization and Use localized string using NSLocalizedString function as used in above functions
+        totalStudentsLabel.text = "Number of students : " + "\(str )"
+            setUpAnchorContraints(lastView: locationLabel, currentView: totalStudentsLabel)
+    }
+    
     //Set up the layout of Extra Data views
     func setUpExtraDataViews(){
-        let dbnStr = schoolsDataViewModel?.schoolDataManager.schoolsData[selectedIndex].dbn
-        
-        if dbnStr != nil {
-            if let extraData = schoolsDataViewModel?.schoolDataManager.schoolsExtraData.first(where: {$0.dbn == dbnStr}){
+        if dbn != nil {
+            if let extraData = schoolsDataViewModel?.schoolDataManager.schoolsExtraData.first(where: {$0.dbn == dbn}){
                 setUpTestTakerLabelView(extraData.num_of_sat_test_takers)
                 setUpCritReadingAvgScoreLabelView(extraData.sat_critical_reading_avg_score)
                 setUpMathAvgScoreLableView(extraData.sat_math_avg_score)
                 setUpWritingAvgScoreLabelView(extraData.sat_writing_avg_score)
             }
         }
-    }
-    
-    func setUpDBNView(){
-        dbnLabel.textColor = .black
-        dbnLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        let dbnStr = schoolsDataViewModel?.schoolDataManager.schoolsData[selectedIndex].dbn
-        
-        // Dont use hard coded  string if you are using multiple  languages, apply localization and Use localized string using NSLocalizedString function
-        dbnLabel.text = "DBN : " + "\(dbnStr ?? "N/A")"
-        dbnLabel.topAnchor.constraint(equalTo: view.topAnchor,constant: 50).isActive = true
-        dbnLabel.leftAnchor.constraint(equalTo: view.leftAnchor,constant: 40).isActive = true
-    }
-    
-    func setUpSchoolNameView(){
-        schoolNameLabel.numberOfLines = 0
-        setColorAndAutosizeMaskConstraint(view: schoolNameLabel)
- 
-        let schoolNameStr = schoolsDataViewModel?.schoolDataManager.schoolsData[selectedIndex].school_name
-        
-        let localizedStr = NSLocalizedString("SCHOOL", comment: "") + " " + NSLocalizedString("NAME", comment: "") + ":"
-        schoolNameLabel.text = localizedStr + "\(schoolNameStr ?? "N/A")"
-        setUpAnchorContraints(lastView: dbnLabel, currentView: schoolNameLabel)
-        schoolNameLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
-    }
-    
-    
-    func setUpLocationLabelView(){
-        locationLabel.numberOfLines = 0
-        setColorAndAutosizeMaskConstraint(view: locationLabel)
- 
-        let locationStr = schoolsDataViewModel?.schoolDataManager.schoolsData[selectedIndex].location
-        let localizedStr = NSLocalizedString("LOCATION", comment: "") + ": "
-        locationLabel.text = localizedStr + "\(locationStr ?? "N/A")"
-        
-        setUpAnchorContraints(lastView: schoolNameLabel, currentView: locationLabel)
-        locationLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
-    }
-    
-    func setUpTotalStudentsLabelView(){
-        setColorAndAutosizeMaskConstraint(view: totalStudentsLabel)
- 
-        let noOfStudentsStr = schoolsDataViewModel?.schoolDataManager.schoolsData[selectedIndex].total_students
-        
-        // Dont use hard coded  string if you are using multiple  languages, apply localization and Use localized string using NSLocalizedString function as used in above functions
-        totalStudentsLabel.text = "Number of students : " + "\(noOfStudentsStr ?? "N/A")"
-        setUpAnchorContraints(lastView: locationLabel, currentView: totalStudentsLabel)
     }
     
     func setUpTestTakerLabelView(_ str:String){
