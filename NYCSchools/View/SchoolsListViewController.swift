@@ -30,7 +30,7 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
         setUpNavigation()
         setUpSchoolsListTableView()
         setUpLayOut()
-        fetchSchoolsExtraData()
+        fetchSchoolsData()
     }
     
     //Set up Table view to listen
@@ -65,7 +65,7 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
     }
     
     // Retrieve the  data from the viewModel and handle the error properly
-    func fetchSchoolsExtraData(){
+    func fetchSchoolsData(){
         schoolsDataViewModel?.fetchSchoolsData(){ result in
             switch result{
             case .success(let data): // Data successfully received
