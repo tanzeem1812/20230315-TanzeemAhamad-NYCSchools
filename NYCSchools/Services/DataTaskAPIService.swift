@@ -19,6 +19,7 @@ enum ErrorCodes:Error{
 protocol DataAPIServiceProtocol{
     var fetchDataResult:Result<Data, ErrorCodes>? {get set}
     func fetchDataRequest(url:URL,completion:@escaping (Result<Data,ErrorCodes>)->Void)
+    func fetchJsonData<T:Decodable>(url:URL,completion:@escaping (Result<[T],ErrorCodes>)->Void)
 }
 
 
@@ -41,5 +42,25 @@ class DataTaskAPIService:DataAPIServiceProtocol{
             
             completion(self.fetchDataResult!)
         }.resume()
+    }
+    
+    func fetchJsonData<T:Decodable>(url:URL,completion:@escaping (Result<[T],ErrorCodes>)->Void){
+        var fetchDataResult: Result<[T],ErrorCodes>?
+        
+        fetchDataRequest(url: url){ result in
+            switch result{
+            case .success(let data):
+                do{
+                    let tmpData  = try JSONDecoder().decode([T].self, from: data)
+                    fetchDataResult = .success(tmpData)
+                }
+                catch{
+                    fetchDataResult = .failure(.decodingError)
+                }
+            case .failure(let error):
+                fetchDataResult = .failure(error)
+            }
+            completion(fetchDataResult!)
+        }
     }
 }
