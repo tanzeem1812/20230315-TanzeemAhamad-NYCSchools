@@ -101,7 +101,7 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
 extension SchoolsListViewController{
    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var count = viewModel?.dataManager.getSchoolsData().count
+        let count = viewModel?.dataManager.getSchoolsData().count
         return count ?? 0
     }
     
