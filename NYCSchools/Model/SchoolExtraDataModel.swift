@@ -23,20 +23,4 @@ struct SchoolExtraDataModel:Decodable,Hashable{
         self.sat_math_avg_score = mathAvgScore
         self.sat_writing_avg_score = writingAvgScore
     }
-    
-    static func == (lhs: SchoolExtraDataModel, rhs: SchoolExtraDataModel) -> Bool {
-        return lhs.dbn == rhs.dbn
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(dbn)
-    }
-    
-    init(withDbn dbn: String) {
-        self.dbn = dbn
-        self.num_of_sat_test_takers = ""
-        self.sat_critical_reading_avg_score = ""
-        self.sat_math_avg_score = ""
-        self.sat_writing_avg_score = ""
-    }
 }

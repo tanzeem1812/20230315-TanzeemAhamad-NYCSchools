@@ -27,7 +27,7 @@ class SchoolsDataViewModel{
         
         let url:URL = URL(string: urlStr)!
         
-        apiService?.fetchJsonData(url:url){[weak self] (result: Result<[SchoolDataModel],ErrorCodes>) in
+        apiService?.fetchDataRequest(url:url){[weak self] (result: Result<[SchoolDataModel],ErrorCodes>) in
             switch result{
             case .success(let data):
                 self?.schoolDataManager.schoolsData  = data
@@ -62,7 +62,7 @@ class SchoolsDataViewModel{
         
         let url:URL = URL(string: queryStr)!
         
-        apiService?.fetchJsonData(url: url){[weak self] (result: Result<[SchoolExtraDataModel],ErrorCodes>) in
+        apiService?.fetchDataRequest(url: url){[weak self] (result: Result<[SchoolExtraDataModel],ErrorCodes>) in
             switch result{
             case .success(let data):
                 if data.count > 0 {

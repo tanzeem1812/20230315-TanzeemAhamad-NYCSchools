@@ -10,18 +10,16 @@ import XCTest
 
 
 class MockDataAPIService: DataAPIServiceProtocol {
-
-    var fetchDataResult: Result<Data,ErrorCodes>?
-
-    func fetchDataRequest(url: URL, completion: @escaping (Result<Data, ErrorCodes>) -> Void) {
-        if let result = fetchDataResult {
-            completion(result)
-        }
+    func fetchDataRequest<T:Decodable>(url: URL, completion: @escaping (Result<T, ErrorCodes>) -> Void)  {
+//        var fetchDataResult : Result<T,ErrorCodes>?
+//
+//        if let result = fetchDataResult {
+//            completion(result)
+//        }
     }
+
+
     
-    func fetchJsonData<T:Decodable>(url: URL, completion: @escaping (Result<[T], ErrorCodes>) -> Void)  {
-    
-    }
 }
 
 protocol SchoolsListDataViewModelOutput :AnyObject{
