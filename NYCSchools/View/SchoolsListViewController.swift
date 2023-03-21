@@ -101,7 +101,8 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
 extension SchoolsListViewController{
    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (viewModel?.dataManager.getSchoolsData().count)!
+        var count = viewModel?.dataManager.getSchoolsData().count
+        return count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -110,8 +111,8 @@ extension SchoolsListViewController{
         let data = schoolData![indexPath.row]
         cell.dbnLabel.text = "DBN:"
         cell.schoolLabel.text = NSLocalizedString("SCHOOL", comment: "") + ":"
-        cell.dbnNameLabel.text =  data.dbn ?? "N/A"// It will return DBN Value
-        cell.schoolNameLabel.text = data.school_name ?? "N/A" // It will return ScboolName Value
+        cell.dbnNameLabel.text =  data.dbn ?? "N/A"
+        cell.schoolNameLabel.text = data.school_name ?? "N/A" 
         return cell
     }
     
