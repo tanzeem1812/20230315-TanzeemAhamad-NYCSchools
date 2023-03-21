@@ -12,11 +12,11 @@ import UIKit
 class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     var schoolListTableView = UITableView()
     var dataForTableView = [(String?,String?)]()
-    var schoolsDataViewModel:SchoolsDataViewModel?
+    var viewModel:SchoolsDataViewModel?
     let cellId = "schoolCell"
   
     init(schoolsDataViewModel:SchoolsDataViewModel?){
-        self.schoolsDataViewModel = schoolsDataViewModel
+        self.viewModel = schoolsDataViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -68,7 +68,7 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
     
     // Retrieve the  data from the viewModel and handle the error properly
     func fetchSchoolsData(){
-        schoolsDataViewModel?.fetchSchoolsData(){ result in
+        viewModel?.fetchSchoolsData(){ result in
                 switch result{
                 case .success(let data): // Data successfully received
                     self.dataForTableView = data
@@ -119,10 +119,10 @@ extension SchoolsListViewController{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-        let data = schoolsDataViewModel?.dataManager.getSchoolDataForIndex(index: indexPath.row)
+        let data = viewModel?.dataManager.getSchoolDataForIndex(index: indexPath.row)
         
         let schoolDetailViewController = SchoolDetailViewController(dbn: data?.dbn)
-        schoolDetailViewController.schoolsDataViewModel = self.schoolsDataViewModel
+        schoolDetailViewController.viewModel = self.viewModel
         self.navigationController?.pushViewController(schoolDetailViewController, animated: true)
     }
 }

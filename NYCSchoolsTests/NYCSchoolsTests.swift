@@ -64,7 +64,7 @@ final class NYCSchoolsTests: XCTestCase {
            let expectation = self.expectation(description: "SchoolsData")
            
            //Given OR Arrange
-           var schoolsData:[(String,String)]?
+           var schoolsData:[(String?,String?)]?
            
            // when OR Act
            sut.fetchSchoolsData(completion: {result in
@@ -80,7 +80,7 @@ final class NYCSchoolsTests: XCTestCase {
            self.waitForExpectations(timeout: 4.0, handler: nil)
            
            //Then OR Assert/
-           XCTAssertNotNil(schoolsData!)
+           XCTAssertNotNil(schoolsData)
        }
     
     func testSchoolExtraDataAPIService() { // Real School Data API Call

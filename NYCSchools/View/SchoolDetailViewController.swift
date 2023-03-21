@@ -12,7 +12,7 @@ import UIKit
 class SchoolDetailViewController: UIViewController {
     
     var dbn:String?
-    var schoolsDataViewModel:SchoolsDataViewModel?
+    var viewModel:SchoolsDataViewModel?
     
     let dbnLabel = UILabel()
     let schoolNameLabel = UILabel()
@@ -39,7 +39,7 @@ class SchoolDetailViewController: UIViewController {
             // Set up the layout of the views
             setUpDBNView()
              
-             let schoolData = schoolsDataViewModel?.dataManager.getSchoolDataFor(dbn: dbn!)
+             let schoolData = viewModel?.dataManager.getSchoolDataFor(dbn: dbn!)
             
             if schoolData != nil{
                 setUpSchoolNameView(str:schoolData!.school_name ?? "N/A")
@@ -52,7 +52,7 @@ class SchoolDetailViewController: UIViewController {
                  setUpTotalStudentsLabelView(str:"N/A")
              }
             
-            schoolsDataViewModel?.fetchSchoolsExtraData(dbnStr:dbn!, completion: {[weak self] result in
+             viewModel?.fetchSchoolsExtraData(dbnStr:dbn!, completion: {[weak self] result in
                 switch result{
                 case .success(_):
                     // Show data in main thread as this closure will be called by background thread
@@ -122,7 +122,7 @@ class SchoolDetailViewController: UIViewController {
     //Set up the layout of Extra Data views
     func setUpExtraDataViews(){
         if dbn != nil {
-            if let extraData = schoolsDataViewModel?.dataManager.getExtraSchoolDataFor(dbn: dbn!){
+            if let extraData = viewModel?.dataManager.getExtraSchoolDataFor(dbn: dbn!){
                 setUpTestTakerLabelView(extraData.num_of_sat_test_takers ?? "N/A")
                 setUpCritReadingAvgScoreLabelView(extraData.sat_critical_reading_avg_score ?? "N/A")
                 setUpMathAvgScoreLableView(extraData.sat_math_avg_score ?? "N/A")
