@@ -27,13 +27,7 @@ class DataTaskAPIService:DataAPIServiceProtocol{
       
         URLSession.shared.dataTask(with: url){ data,response,error in
             var fetchDataResult : Result<T,ErrorCodes>?
-       
-            if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode){
-                fetchDataResult = .failure(.serverError(ServerCode: response.statusCode))
-            }
-            if let error = error{
-                fetchDataResult = .failure(.error(error: error.localizedDescription))
-            }
+          
             if let data = data{
                 do{
                     let tmpData  = try JSONDecoder().decode(T.self, from: data)
@@ -42,9 +36,16 @@ class DataTaskAPIService:DataAPIServiceProtocol{
                 catch{
                     fetchDataResult = .failure(.decodingError)
                 }
-
             }
+            else if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode){
+                fetchDataResult = .failure(.serverError(ServerCode: response.statusCode))
+            }
+            else if let error = error{
+                fetchDataResult = .failure(.error(error: error.localizedDescription))
+            }
+          
             completion(fetchDataResult!)
+            
         }.resume()
     }
 }

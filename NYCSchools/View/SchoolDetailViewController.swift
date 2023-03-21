@@ -39,12 +39,12 @@ class SchoolDetailViewController: UIViewController {
             // Set up the layout of the views
             setUpDBNView()
              
-            let schoolData = schoolsDataViewModel?.schoolDataManager.schoolsData.first{$0.dbn == dbn}
+             let schoolData = schoolsDataViewModel?.dataManager.getSchoolDataFor(dbn: dbn!)
             
             if schoolData != nil{
-                setUpSchoolNameView(str:schoolData!.school_name)
-                setUpLocationLabelView(str:schoolData!.location)
-                setUpTotalStudentsLabelView(str:schoolData!.total_students)
+                setUpSchoolNameView(str:schoolData!.school_name ?? "N/A")
+                setUpLocationLabelView(str:schoolData!.location ?? "N/A")
+                setUpTotalStudentsLabelView(str:schoolData!.total_students ?? "N/A")
             }
              else{
                  setUpSchoolNameView(str:"N/A")
@@ -122,11 +122,11 @@ class SchoolDetailViewController: UIViewController {
     //Set up the layout of Extra Data views
     func setUpExtraDataViews(){
         if dbn != nil {
-            if let extraData = schoolsDataViewModel?.schoolDataManager.schoolsExtraData.first(where: {$0.dbn == dbn}){
-                setUpTestTakerLabelView(extraData.num_of_sat_test_takers)
-                setUpCritReadingAvgScoreLabelView(extraData.sat_critical_reading_avg_score)
-                setUpMathAvgScoreLableView(extraData.sat_math_avg_score)
-                setUpWritingAvgScoreLabelView(extraData.sat_writing_avg_score)
+            if let extraData = schoolsDataViewModel?.dataManager.getExtraSchoolDataFor(dbn: dbn!){
+                setUpTestTakerLabelView(extraData.num_of_sat_test_takers ?? "N/A")
+                setUpCritReadingAvgScoreLabelView(extraData.sat_critical_reading_avg_score ?? "N/A")
+                setUpMathAvgScoreLableView(extraData.sat_math_avg_score ?? "N/A")
+                setUpWritingAvgScoreLabelView(extraData.sat_writing_avg_score ?? "N/A")
             }
         }
     }

@@ -11,11 +11,10 @@ import UIKit
 
 class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     var schoolListTableView = UITableView()
-    var dataForTableView = [(String,String)]()
+    var dataForTableView = [(String?,String?)]()
     var schoolsDataViewModel:SchoolsDataViewModel?
     let cellId = "schoolCell"
-    var isWaiting = false
-    
+  
     init(schoolsDataViewModel:SchoolsDataViewModel?){
         self.schoolsDataViewModel = schoolsDataViewModel
         super.init(nibName: nil, bundle: nil)
@@ -31,20 +30,10 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
         setUpNavigation()
         setUpSchoolsListTableView()
         setUpLayOut()
-        if !isWaiting{
-            isWaiting = true
-            fetchSchoolsData()
-        }
+        fetchSchoolsData()
+
     }
-    override func viewWillAppear(_ animated:Bool) {
-        super.viewWillAppear( animated)
-        if schoolsDataViewModel?.schoolDataManager.schoolsData.count == 0{
-            if !isWaiting{
-                isWaiting = true
-                fetchSchoolsData()
-            }
-        }
-    }
+  
     
     //Set up Table view to listen
     func setUpSchoolsListTableView(){
@@ -88,7 +77,6 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
                     }
                 case .failure(let error): // Show error to the user
                     self.handleError(error: error)
-                self.isWaiting = false
             }
         }
     }
@@ -122,14 +110,18 @@ extension SchoolsListViewController{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! SchoolTableViewCell
         let schoolData = dataForTableView[indexPath.row]
-        cell.dbnNameLabel.text =  schoolData.0 // It will return DBN Value
-        cell.schoolNameLabel.text = schoolData.1 // It will return ScboolName Value
+        cell.dbnLabel.text = "DBN:"
+        cell.schoolLabel.text = NSLocalizedString("SCHOOL", comment: "") + ":"
+        cell.dbnNameLabel.text =  schoolData.0 ?? "N/A"// It will return DBN Value
+        cell.schoolNameLabel.text = schoolData.1 ?? "N/A" // It will return ScboolName Value
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let dbn = schoolsDataViewModel?.schoolDataManager.schoolsData[indexPath.row].dbn
-        let schoolDetailViewController = SchoolDetailViewController(dbn: dbn)
+    
+        let data = schoolsDataViewModel?.dataManager.getSchoolDataForIndex(index: indexPath.row)
+        
+        let schoolDetailViewController = SchoolDetailViewController(dbn: data?.dbn)
         schoolDetailViewController.schoolsDataViewModel = self.schoolsDataViewModel
         self.navigationController?.pushViewController(schoolDetailViewController, animated: true)
     }
