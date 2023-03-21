@@ -19,8 +19,7 @@ class SchoolsDataViewModel{
         
         let urlStr = Utility.infoForKey("SCHOOLS_DATA_API_URL")!
         if !Utility.isValidURLString(urlStr: urlStr){
-            let infoStr = "Function: \(#function), line: \(#line) - Request failed as \(urlStr) is not a valid URL"
-            fetchDataResult = .failure(.invalidURL(info: infoStr))
+            fetchDataResult = .failure(.invalidURL(info: urlStr))
             completion(fetchDataResult!)
             return
         }
@@ -33,7 +32,6 @@ class SchoolsDataViewModel{
                 self?.dataManager.setSchoolsData(data:data)
                 let schoolData = data.map {($0.dbn,$0.school_name)}
                 fetchDataResult = .success(schoolData)
-                print("h")
             case .failure(let error):
                 fetchDataResult = .failure(error)
             }
@@ -52,16 +50,15 @@ class SchoolsDataViewModel{
         }
         
         let baseUrlStr = Utility.infoForKey("SCHOOL_EXTRA_DATA_API_URL")!
-        let queryStr = baseUrlStr + "?dbn=" + dbnStr
+        let urlStr = baseUrlStr + "?dbn=" + dbnStr
         
-        if !Utility.isValidURLString(urlStr: queryStr){
-            let infoStr = "Function: \(#function), line: \(#line) - Request failed as \(queryStr) is not a valid URL"
-            fetchDataResult = .failure(.invalidURL(info: infoStr))
+        if !Utility.isValidURLString(urlStr: urlStr){
+             fetchDataResult = .failure(.invalidURL(info: urlStr))
             completion(fetchDataResult!)
             return
         }
         
-        let url:URL = URL(string: queryStr)!
+        let url:URL = URL(string: urlStr)!
         
         apiService?.fetchDataRequest(url: url){[weak self] (result: Result<[SchoolExtraDataModel],ErrorCodes>) in
             switch result{
@@ -71,7 +68,7 @@ class SchoolsDataViewModel{
                     fetchDataResult = .success("DataAvailable")
                 }
                 else{
-                    fetchDataResult = .failure(.dataNotExist)
+                    fetchDataResult = .failure(.dataNotFound)
                 }
                 
             case .failure(let error):

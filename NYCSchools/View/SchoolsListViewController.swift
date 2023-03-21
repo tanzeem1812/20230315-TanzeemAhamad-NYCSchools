@@ -84,8 +84,7 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
     // Handle Error to show proper error Message to the user
     func handleError(error:ErrorCodes){
         let localizedTitleStr = NSLocalizedString("Error", comment: "")
-        let msg = Utility.getErrorMessageForErrorCode(errorCode: error)
-        showAlert( title: localizedTitleStr,message: msg)
+        showAlert( title: localizedTitleStr,message: error.errorDescription!)
     }
 
     // Alert should be displayed in main thread in case its called from the background thread
