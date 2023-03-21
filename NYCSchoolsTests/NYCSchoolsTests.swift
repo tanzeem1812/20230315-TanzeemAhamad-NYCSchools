@@ -18,6 +18,10 @@ class MockDataAPIService: DataAPIServiceProtocol {
             completion(result)
         }
     }
+    
+    func fetchJsonData<T:Decodable>(url: URL, completion: @escaping (Result<[T], ErrorCodes>) -> Void)  {
+    
+    }
 }
 
 protocol SchoolsListDataViewModelOutput :AnyObject{
