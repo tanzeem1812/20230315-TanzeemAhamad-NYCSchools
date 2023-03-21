@@ -78,7 +78,6 @@ class SchoolDetailViewController: UIViewController {
         view.addSubview(writingAvgScoreLabel)
     }
     
-  
     func setUpDBNView(){
         dbnLabel.textColor = .black
         dbnLabel.translatesAutoresizingMaskIntoConstraints = false

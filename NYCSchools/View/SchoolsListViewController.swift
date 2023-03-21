@@ -31,7 +31,6 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
         setUpSchoolsListTableView()
         setUpLayOut()
         fetchSchoolsData()
-
     }
   
     
@@ -117,9 +116,7 @@ extension SchoolsListViewController{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    
         let data = viewModel?.dataManager.getSchoolDataForIndex(index: indexPath.row)
-        
         let schoolDetailViewController = SchoolDetailViewController(dbn: data?.dbn)
         schoolDetailViewController.viewModel = self.viewModel
         self.navigationController?.pushViewController(schoolDetailViewController, animated: true)

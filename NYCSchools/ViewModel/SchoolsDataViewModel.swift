@@ -25,7 +25,6 @@ class SchoolsDataViewModel{
         }
         
         let url:URL = URL(string: urlStr)!
-        
         apiService?.fetchDataRequest(url:url){[weak self] (result: Result<[SchoolDataModel],ErrorCodes>) in
             switch result{
             case .success(let data):
