@@ -11,7 +11,6 @@ import UIKit
 
 class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     var schoolListTableView = UITableView()
-    var dataForTableView = [(String?,String?)]()
     var viewModel:SchoolsDataViewModel?
     let cellId = "schoolCell"
   
@@ -69,8 +68,8 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
     func fetchSchoolsData(){
         viewModel?.fetchSchoolsData(){ result in
                 switch result{
-                case .success(let data): // Data successfully received
-                    self.dataForTableView = data
+                case .success(_): // Data successfully received
+                    //self.dataForTableView = data
                     DispatchQueue.main.async {
                         self.schoolListTableView.reloadData()
                     }
@@ -102,16 +101,17 @@ class SchoolsListViewController: UIViewController,UITableViewDelegate, UITableVi
 extension SchoolsListViewController{
    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataForTableView.count
+        return (viewModel?.dataManager.getSchoolsData().count)!
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! SchoolTableViewCell
-        let schoolData = dataForTableView[indexPath.row]
+        let schoolData = viewModel?.dataManager.getSchoolsData()
+        let data = schoolData![indexPath.row]
         cell.dbnLabel.text = "DBN:"
         cell.schoolLabel.text = NSLocalizedString("SCHOOL", comment: "") + ":"
-        cell.dbnNameLabel.text =  schoolData.0 ?? "N/A"// It will return DBN Value
-        cell.schoolNameLabel.text = schoolData.1 ?? "N/A" // It will return ScboolName Value
+        cell.dbnNameLabel.text =  data.dbn ?? "N/A"// It will return DBN Value
+        cell.schoolNameLabel.text = data.school_name ?? "N/A" // It will return ScboolName Value
         return cell
     }
     

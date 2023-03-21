@@ -14,8 +14,8 @@ class SchoolsDataViewModel{
         self.apiService = apiService
     }
         
-    func fetchSchoolsData(completion:@escaping (Result<[(String?,String?)],ErrorCodes>)->Void){
-        var fetchDataResult: Result<[(String?,String?)],ErrorCodes>?
+    func fetchSchoolsData(completion:@escaping (Result<String,ErrorCodes>)->Void){
+        var fetchDataResult: Result<String,ErrorCodes>?
         
         let urlStr = Utility.infoForKey("SCHOOLS_DATA_API_URL")!
         if !Utility.isValidURLString(urlStr: urlStr){
@@ -25,12 +25,12 @@ class SchoolsDataViewModel{
         }
         
         let url:URL = URL(string: urlStr)!
+        
         apiService?.fetchDataRequest(url:url){[weak self] (result: Result<[SchoolDataModel],ErrorCodes>) in
             switch result{
             case .success(let data):
                 self?.dataManager.setSchoolsData(data:data)
-                let schoolData = data.map {($0.dbn,$0.school_name)}
-                fetchDataResult = .success(schoolData)
+                fetchDataResult = .success("DataAvailable")
             case .failure(let error):
                 fetchDataResult = .failure(error)
             }

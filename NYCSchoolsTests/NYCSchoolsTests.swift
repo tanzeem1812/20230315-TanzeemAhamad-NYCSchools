@@ -64,7 +64,7 @@ final class NYCSchoolsTests: XCTestCase {
            let expectation = self.expectation(description: "SchoolsData")
            
            //Given OR Arrange
-           var schoolsData:[(String?,String?)]?
+           var schoolsData:String?
            
            // when OR Act
            sut.fetchSchoolsData(completion: {result in
